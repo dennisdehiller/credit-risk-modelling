@@ -240,6 +240,26 @@ x4090(2:4, 2:4)
 
 
 %% 4.2
+% Use 5.9.1.7 @ p.113 for VaR and 5.6 @ p.98
+clc
+clear
+
+m = 1000;
+loansize = 1000000;
+losses = 0.6;
+loan_loss = loansize*losses;
+p_bar = 0.04;
+rho = 0.1;
+alpha = [0.95, 0.99, 0.999];
+
+for i = 1:length(alpha)
+    VaR = loan_loss*m*(normcdf(((sqrt(rho)*norminv(alpha))+norminv(p_bar))/(sqrt(1-rho))));
+        for i = 1:length(VaR)
+            ES = (1 / (1-alpha(j)))*integral(VaR(i), alpha(j), 1)
+        end
+end
+
+Ajdå!
 
 
 
