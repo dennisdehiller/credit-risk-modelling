@@ -32,13 +32,13 @@ total = senior + equity + junior
 
 %% 1.4
 clc
-mu = (0:0.02:0.5);
-for i = 1:length(mu)
-    mu(i) = defprob(200, 150, mu(i), 0.3, 5);
+mu_1yr = (0:0.02:0.5);
+for i = 1:length(mu_1yr)
+    mu_1yr(i) = defprob(200, 150, mu_1yr(i), 0.3, 5);
 end
 
 xval = (0:0.02:0.5);
-plot(xval, mu);
+plot(xval, mu_1yr);
 title('The default probability in the Merton model: D=150, V=200, \sigma=0.3', 'FontSize', 16)
 xlabel('\mu', 'FontSize', 15) 
 ylabel('Default probability', 'FontSize', 15) 
@@ -60,13 +60,31 @@ vol_1yr = xlsread("blm.xlsx", 'bloomberg', 'G2');
 mkt_cap = xlsread("blm.xlsx", 'bloomberg', 'H2');
 debt_equity_ratio = xlsread("blm.xlsx", 'bloomberg', 'I2');
 
-T = 1;
 
-mu = log(debt_equity_ratio)/T+0.5*vol_1yr.*(vol_1yr-(2*norminv(df_prob_1yr))/sqrt(T));
-mu
+T_1 = 1;
+T_3 = 3;
+vol_3yr = vol_1yr*sqrt(T_3);
+
+mu_1yr = log(debt_equity_ratio)/T_1+0.5*vol_1yr*(vol_1yr-(2*norminv(df_prob_1yr))/sqrt(T_1));
+DD_1yr = (log(debt_equity_ratio) - (mu_1yr-0.5*(vol_1yr^2))*T_1) / vol_1yr*sqrt(T_1);
+drsk_1yr = normcdf(DD_1yr);
+
+mu_3yr = log(debt_equity_ratio)/T_3+0.5*vol_3yr*(vol_3yr-(2*norminv(df_prob_3yr))/sqrt(T_3));
+vol_3yr
+mu_3yr
+DD_3yr = (log(debt_equity_ratio) - (mu_3yr-0.5*(vol_3yr^2))*T_3) / vol_3yr*sqrt(T_3);
+drsk_3yr = normcdf(DD_3yr);
+
+drsk_3yr
+df_prob_3yr
+
 
 %% 1.6
 clc
+
+
+
+
 %% 2.1
 clc
 t = (1:10);
@@ -146,18 +164,18 @@ Q = [-0.1055, 0.0704, 0.0351; 0.242, -0.329, 0.087; 0, 0, 0];
 alpha_aaa = [1, 0, 0];
 alpha_aa = [0, 1, 0];
 
-T = [1, 3, 5, 7, 10];
+T_1 = [1, 3, 5, 7, 10];
 rf = 0.03;
 
 prob_aaa = zeros(5, 3);
 prob_aa = zeros(5, 3);
 
 for i = 1:5
-    prob_aaa(i,:) = alpha_aaa * (expm(T(i) * Q));
+    prob_aaa(i,:) = alpha_aaa * (expm(T_1(i) * Q));
 end
 
 for i = 1:5
-    prob_aa(i,:) = alpha_aa * (expm(T(i) * Q));
+    prob_aa(i,:) = alpha_aa * (expm(T_1(i) * Q));
 end
 
 payout_aaa_10 = prob_aaa;
