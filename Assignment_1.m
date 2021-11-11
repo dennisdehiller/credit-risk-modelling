@@ -1,6 +1,6 @@
 %% 1.1
 clc
-[s,b] = bs(135, 95, 0, 2, 0.2, 0.02)
+[s,b] = bs(135, 95, 0, 2, 0.2, 0.02);
 
 %% 1.2
 clc
@@ -25,10 +25,10 @@ legend({'D = 95','D = 70'},'Location','northeast', 'FontSize', 12)
 
 %% 1.3
 clc
-senior = 150 - bs(150, 75, 0, 3, 0.35, 0.02)
-equity = bs(150, 135, 0, 3, 0.35, 0.02)
-junior = bs(150, 75, 0, 3, 0.35, 0.02) - equity
-total = senior + equity + junior
+senior = 150 - bs(150, 75, 0, 3, 0.35, 0.02);
+equity = bs(150, 135, 0, 3, 0.35, 0.02);
+junior = bs(150, 75, 0, 3, 0.35, 0.02) - equity;
+total = senior + equity + junior;
 
 %% 1.4
 clc
@@ -45,7 +45,7 @@ ylabel('Default probability', 'FontSize', 15)
 print -deps 1.4.eps
 
 mertonmodel(200, 0.3, 150, 0, 'Drift',0.3, 'Maturity',5)
-pd = defprob(200, 150, 0.3, 0.3, 5)
+pd = defprob(200, 150, 0.3, 0.3, 5);
 
 %% 1.5
 clc
@@ -70,13 +70,13 @@ DD_1yr = (log(debt_equity_ratio) - (mu_1yr-0.5*(vol_1yr^2))*T_1) / vol_1yr*sqrt(
 drsk_1yr = normcdf(DD_1yr);
 
 mu_3yr = log(debt_equity_ratio)/T_3+0.5*vol_3yr*(vol_3yr-(2*norminv(df_prob_3yr))/sqrt(T_3));
-vol_3yr
-mu_3yr
+vol_3yr;
+mu_3yr;
 DD_3yr = (log(debt_equity_ratio) - (mu_3yr-0.5*(vol_3yr^2))*T_3) / vol_3yr*sqrt(T_3);
 drsk_3yr = normcdf(DD_3yr);
 
-drsk_3yr
-df_prob_3yr
+drsk_3yr;
+df_prob_3yr;
 
 
 %% 1.6
@@ -98,7 +98,7 @@ for i = 1:length(recovery_rates)
         table(i, j) = ((price_bond(j) / price_rf(j)) - recovery_rates(i)) / (1 - recovery_rates(i));
     end
 end
-table
+table;
 phi5 = table(1,:);
 phi40 = table(3,:);
 
@@ -107,8 +107,8 @@ for i = 1:(length(phi5) - 1)
     phi40(i) = table(3, (i)) - table(3, i+1);
 end
 
-phi5(1:9)
-phi40(1:9)
+phi5(1:9);
+phi40(1:9);
 
 %% 3.1
 clc
@@ -200,10 +200,46 @@ for i = 1:5
     price_aa_50(i) = sum(payout_aa_50(i,:));
 end
 
-price_aaa_10
-price_aaa_50
-price_aa_10
-price_aa_50
+price_aaa_10;
+price_aaa_50;
+price_aa_10;
+price_aa_50;
+
+%% 4.1
+clc
+clear
+
+%using eq 5.9.25 (s109)-      fråga vad skillnaden på den och 5.9.1.5 är.
+%Är den mer precis?
+
+m = 1000;
+loansize = 1000000;
+losses = 0.6;
+p_bar = [0.04, 0.05, 0.1, 0.15];
+rho = [0.1, 0.15, 0.35, 0.6];
+x40 = 40000000;
+x90 = 90000000;
+loan_loss = losses*loansize;
+
+loss_dist_40 = normcdf((1/sqrt(rho(1,1)))*(sqrt(1-rho)*norminv(x40/(loan_loss*m))-norminv(p_bar(1,1))));
+loss_dist_90 = normcdf((1/sqrt(rho(1,1)))*(sqrt(1-rho)*norminv(x90/(loan_loss*m))-norminv(p_bar(1,1))));
+
+% 40 < x < 90
+x4090 = loss_dist_90 - loss_dist_40;
+x4090(1,1)
+
+for i = 2:4
+    for j = 2:4
+        loss_dist_40(i, j) = normcdf((1/sqrt(rho(i)))*(sqrt(1-rho(i))*norminv(x40/(loan_loss*m))-norminv(p_bar(j))));
+        loss_dist_90(i, j) = normcdf((1/sqrt(rho(i)))*(sqrt(1-rho(i))*norminv(x90/(loan_loss*m))-norminv(p_bar(j))));
+        x4090 = loss_dist_90 - loss_dist_40;
+    end
+end
+
+
+
+    
+
 
 %%
 function [s,b] = bs(v,d,t,terminal,sigma,r)
