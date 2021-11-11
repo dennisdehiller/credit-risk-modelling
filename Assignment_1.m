@@ -248,18 +248,21 @@ m = 1000;
 loansize = 1000000;
 losses = 0.6;
 loan_loss = loansize*losses;
-p_bar = 0.04;
-rho = 0.1;
+p_bar = [0.05, 0.1, 0.15];
+rho = [0.15, 0.35, 0.6]
 alpha = [0.95, 0.99, 0.999];
 
 for i = 1:length(alpha)
-    VaR = loan_loss*m*(normcdf(((sqrt(rho)*norminv(alpha))+norminv(p_bar))/(sqrt(1-rho))));
-        for i = 1:length(VaR)
-            ES = (1 / (1-alpha(j)))*integral(VaR(i), alpha(j), 1)
-        end
+    VaR = loan_loss*m*(normcdf(((sqrt(rho)*norminv(alpha))+norminv(p_bar))/(sqrt(1-rho))))
 end
 
-Ajdå!
+
+for i = 1:length(VaR)
+    ES = (1 / (1-alpha(j)))*integral(VaR(i), alpha(j), 1)
+end
+
+
+% Ajdå! Glöm inte alla nio fina par du hade innan :)
 
 
 
