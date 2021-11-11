@@ -49,6 +49,22 @@ pd = defprob(200, 150, 0.3, 0.3, 5)
 
 %% 1.5
 clc
+
+df_prob_1yr = xlsread("blm.xlsx", 'bloomberg', 'A2');
+df_prob_2yr = xlsread("blm.xlsx", 'bloomberg', 'B2');
+df_prob_3yr = xlsread("blm.xlsx", 'bloomberg', 'C2');
+df_prob_4yr = xlsread("blm.xlsx", 'bloomberg', 'D2');
+df_prob_5yr = xlsread("blm.xlsx", 'bloomberg', 'E2');
+totalt_debt = xlsread("blm.xlsx", 'bloomberg', 'F2');
+vol_1yr = xlsread("blm.xlsx", 'bloomberg', 'G2');
+mkt_cap = xlsread("blm.xlsx", 'bloomberg', 'H2');
+debt_equity_ratio = xlsread("blm.xlsx", 'bloomberg', 'I2');
+
+T = 1;
+
+mu = log(debt_equity_ratio)/T+0.5*vol_1yr.*(vol_1yr-(2*norminv(df_prob_1yr))/sqrt(T));
+mu
+
 %% 1.6
 clc
 %% 2.1
