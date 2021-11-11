@@ -262,7 +262,7 @@ for i = 1:length(VaR)
 end
 
 
-% Ajdå! Glöm inte alla nio fina par du hade innan :)
+% Ajdå! Glöm inte alla nio fina par du hade innan :)    f
 
 
 
