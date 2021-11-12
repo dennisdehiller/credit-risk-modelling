@@ -55,34 +55,33 @@ df_prob_2yr = xlsread("blm.xlsx", 'bloomberg', 'B2');
 df_prob_3yr = xlsread("blm.xlsx", 'bloomberg', 'C2');
 df_prob_4yr = xlsread("blm.xlsx", 'bloomberg', 'D2');
 df_prob_5yr = xlsread("blm.xlsx", 'bloomberg', 'E2');
-totalt_debt = xlsread("blm.xlsx", 'bloomberg', 'F2');
+total_debt = xlsread("blm.xlsx", 'bloomberg', 'F2');
 vol_1yr = xlsread("blm.xlsx", 'bloomberg', 'G2');
 mkt_cap = xlsread("blm.xlsx", 'bloomberg', 'H2');
+v0 = (total_debt + mkt_cap);
 debt_equity_ratio = xlsread("blm.xlsx", 'bloomberg', 'I2');
-
+d_divided_v0 = (v0/total_debt);
 
 T_1 = 1;
 T_3 = 3;
 vol_3yr = vol_1yr*sqrt(T_3);
 
-mu_1yr = log(debt_equity_ratio)/T_1+0.5*vol_1yr*(vol_1yr-(2*norminv(df_prob_1yr))/sqrt(T_1));
-DD_1yr = (log(debt_equity_ratio) - (mu_1yr-0.5*(vol_1yr^2))*T_1) / vol_1yr*sqrt(T_1);
+mu_1yr = log(d_divided_v0)/T_1+0.5*vol_1yr*(vol_1yr-(2*norminv(df_prob_1yr))/sqrt(T_1));
+DD_1yr = (log(d_divided_v0) - (mu_1yr-0.5*(vol_1yr^2))*T_1) / vol_1yr*sqrt(T_1);
 drsk_1yr = normcdf(DD_1yr);
 
-mu_3yr = log(debt_equity_ratio)/T_3+0.5*vol_3yr*(vol_3yr-(2*norminv(df_prob_3yr))/sqrt(T_3));
-vol_3yr;
-mu_3yr;
-DD_3yr = (log(debt_equity_ratio) - (mu_3yr-0.5*(vol_3yr^2))*T_3) / vol_3yr*sqrt(T_3);
+mu_3yr = log(d_divided_v0)/T_3+0.5*vol_3yr*(vol_3yr-(2*norminv(df_prob_3yr))/sqrt(T_3));
+DD_3yr = (log(d_divided_v0) - (mu_3yr-0.5*(vol_3yr^2))*T_3) / vol_3yr*sqrt(T_3);
 drsk_3yr = normcdf(DD_3yr);
 
-drsk_3yr;
-df_prob_3yr;
+drsk_3yr
+df_prob_3yr
 
 
 %% 1.6
 clc
 
-
+ 
 
 
 %% 2.1
